@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AddRemoveLayout from './AddRemoveLayout.js';
+import 'bootstrap/less/bootstrap.less';
 
 
 // Your widget. Just another react component.

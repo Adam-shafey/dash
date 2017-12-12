@@ -3,16 +3,16 @@ import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import './Body.css';
+import './Placeholder.css';
+import 'bootstrap/less/bootstrap.less';
 
-class Body extends Component {
+class Placeholder extends Component {
   constructor(props) {
     // Pass props to parent class
     super(props);
     // Set initial state
     this.state = {
       expanded: false,
-      cards: this.props.cards,
       open: false,
     }
   }
@@ -58,8 +58,7 @@ class Body extends Component {
       />,
     ];
     return (
-      <div className="card">
-        <Card>
+      <div>
           <CardHeader
             title="Without Avatar"
             subtitle="Subtitle"
@@ -81,10 +80,9 @@ class Body extends Component {
           Only actions can close this dialog.
         </Dialog>
         </CardActions>
-        </Card>
       </div>
     );
   }
 }
 
-export default Body;
+export default Placeholder;
