@@ -63,7 +63,8 @@ class AddRemoveLayout extends Component {
         
     }
 
-    onAddItem() {
+    onAddItem(/*cardType*/) {
+        var cardType=0;
         /*eslint no-console: 0*/
         if(this.state.editing){
         console.log('adding', 'n' + this.state.newCounter);
@@ -76,6 +77,7 @@ class AddRemoveLayout extends Component {
                 w: 1,
                 h: 1,
                 static: false,
+                cardType: cardType
             }),
             // Increment the counter to ensure key is always unique.
             newCounter: this.state.newCounter + 1
@@ -91,7 +93,12 @@ class AddRemoveLayout extends Component {
     }
 
     onLayoutChange(layout) {
-        this.setState({ layout: layout });
+        for (var key in layout) {
+            if (layout.hasOwnProperty(key)) {
+                layout[key].cardType = this.state.items[key].cardType                
+            }
+        }
+        this.setState({ items: layout });
     }
 
     onRemoveItem(i) {
@@ -124,6 +131,7 @@ class AddRemoveLayout extends Component {
                 return newLayouts;
     }
 
+
     render() {
         const modifiedLayouts = this.getModifiedLayouts();
         const children = this.createElements();
@@ -132,7 +140,7 @@ class AddRemoveLayout extends Component {
                 <button onClick={this.onAddItem}>Add Item</button>
                 <button onClick={this.handleEditing}>Edit</button>
 
-                <ReactGridLayout layout={modifiedLayouts}
+                <ReactGridLayout onLayoutChange={this.onLayoutChange} layout={modifiedLayouts}
                     {...this.props}
                     cols={4} rowHeight={300} width={1200}>
                     {children}
