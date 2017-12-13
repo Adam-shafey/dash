@@ -5,52 +5,10 @@ import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 import 'bootstrap/less/bootstrap.less';
 
-console.clear();
 
-const Title = ({ todoCount }) => {
-  return (
-    <div>
-
-    </div>
-  );
-}
-
-const TodoForm = ({ addTodo }) => {
-  // Input Tracker
-  let input;
-  // Return JSX
-  return (
-    <form onSubmit={(e) => {
-      e.preventDefault();
-      addTodo(input.value);
-      input.value = '';
-    }}>
-      <input className="form-control" ref={node => {
-        input = node;
-      }} />
-      <br />
-    </form>
-  );
-};
-
-const Todo = ({ todo, remove }) => {
-  // Each Todo
-  return (<a href="#" className="list-group-item" onClick={() => { remove(todo.id) }}>{todo.text}</a>);
-}
-
-const TodoList = ({ todos, remove }) => {
-  // Map through the todos
-  const todoNode = todos.map((todo) => {
-    return (<Todo todo={todo} key={todo.id} remove={remove} />)
-  });
-  return (<div className="list-group" style={{ marginTop: '30px' }}>{todoNode}</div>);
-}
-
-// Contaner Component
-// Todo Id
-window.id = 0;
 class TodoCard extends React.Component {
   constructor(props) {
     // Pass props to parent class
@@ -60,41 +18,12 @@ class TodoCard extends React.Component {
       data: [],
       expanded: false,
       open: false,
+      value: '',      
     }
-    this.apiUrl = 'https://57b1924b46b57d1100a3c3f8.mockapi.io/api/todos'
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
-  // Lifecycle method
-  componentDidMount() {
-    // Make HTTP reques with Axios
-    axios.get(this.apiUrl)
-      .then((res) => {
-        // Set state with result
-        this.setState({ data: res.data });
-      });
-  }
-  // Add todo handler
-  addTodo(val) {
-    // Assemble data
-    const todo = { text: val }
-    // Update data
-    axios.post(this.apiUrl, todo)
-      .then((res) => {
-        this.state.data.push(res.data);
-        this.setState({ data: this.state.data });
-      });
-  }
-  // Handle remove
-  handleRemove(id) {
-    // Filter all todos except the one to be removed
-    const remainder = this.state.data.filter((todo) => {
-      if (todo.id !== id) return todo;
-    });
-    // Update state with filter
-    axios.delete(this.apiUrl + '/' + id)
-      .then((res) => {
-        this.setState({ data: remainder });
-      })
-  }
+
+
 
   handleExpandChange = (expanded) => {
     this.setState({ expanded: expanded });
@@ -119,8 +48,19 @@ class TodoCard extends React.Component {
     this.setState({ open: false });
   };
 
-
-
+  handleKeyPress = (event) =>{
+    if(event.key == 'Enter'){
+      this.setState({
+        data: this.state.data.concat(this.state.value)
+      })
+      this.state.value = "";
+    }
+  }
+  handleChange = (event) => {
+    this.setState({
+      value: event.target.value,
+    });
+  };
   render() {
     const actions = [
       <FlatButton
@@ -137,14 +77,15 @@ class TodoCard extends React.Component {
     ];
     // Render JSX
     return (
-      <div>        
+      <div>
         <CardHeader title="Without Avatar" subtitle="Subtitle" />
-        <Title todoCount={this.state.data.length} />
-        <TodoForm addTodo={this.addTodo.bind(this)} />
-        <TodoList
-          todos={this.state.data}
-          remove={this.handleRemove.bind(this)}
-        />
+        <TextField
+          hintText="Hint Text"
+          id="text-field-controlled"
+          value={this.state.value}
+          onChange={this.handleChange}
+          onKeyPress={this.handleKeyPress}
+        /><br />
         <CardActions>
           <RaisedButton label="Modal Dialog" onClick={this.handleOpen} />
           <Dialog
