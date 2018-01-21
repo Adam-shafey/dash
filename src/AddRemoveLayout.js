@@ -5,6 +5,7 @@ import { Card, CardActions, CardHeader, CardText, CardMedia } from 'material-ui/
 import FlatButton from 'material-ui/FlatButton';
 import CardTemplate from './cards/CardTemplate.js';
 import TodoCard from './cards/Todo/TodoCard.js';
+import NotesCard from './cards/Notes/NotesCard.js';
 import 'bootstrap/less/bootstrap.less';
 import ReactGridLayout from 'react-grid-layout';
 import Header from './template/header.js'
@@ -67,7 +68,7 @@ class AddRemoveLayout extends Component {
         return this.state.items.map((el) => {
             el.static = !this.state.editing;
             const i = el.add ? '+' : el.i;
-            const cards = [(<CardTemplate card={<TodoCard cardNumber={el.i} saveContent={this.saveCardContent} cardContent={this.getCardContent(el.i)} />} />)];
+            const cards = [(<CardTemplate card={<NotesCard cardNumber={el.i} saveContent={this.saveCardContent} cardContent={this.getCardContent(el.i)} />} />)];
             return (
                 <div key={i}>
                     {el.add ?
